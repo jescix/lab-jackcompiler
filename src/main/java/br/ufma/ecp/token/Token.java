@@ -1,12 +1,14 @@
 package br.ufma.ecp.token;
 public class Token {
-
+//final é uma constante, uma variável imutável
     public final TokenType type;
     public final String lexeme;
+    public final int line;
 
-    public Token (TokenType type, String lexeme) {
+    public Token (TokenType type, String lexeme, int line) {
         this.type = type;
         this.lexeme = lexeme;
+        this.line = line;
     }
 
     public String toString() {
