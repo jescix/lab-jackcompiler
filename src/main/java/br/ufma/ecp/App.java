@@ -16,17 +16,26 @@ public class App
     
     public static void main( String[] args )
     {
-
-    
+        	
         String input = """
-            // é um comentario 10
-            45 \"hello\" variavel + while < , if
-            /*
-            comentario em bloco
+            /* incio do program
+            bem simples
             */
-            42 ola
+            if (a > 10) // teste simples"
+            {
+                let a = a + 1;
+            }
+            /* acabou
+            de verdade
+            */
+            while ( x > 6) {
+                y = 56;
+            }
             
-            """;        Scanner scan = new Scanner (input.getBytes());
+            """;        
+        
+        Scanner scan = new Scanner (input.getBytes());
+
         for (Token tk = scan.nextToken(); tk.type != EOF; tk = scan.nextToken()) {
             System.out.println(tk);
         }

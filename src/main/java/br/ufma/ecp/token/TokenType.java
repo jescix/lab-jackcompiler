@@ -1,5 +1,4 @@
 package br.ufma.ecp.token;
-
 import java.util.List;
 //import java.util.Map;
 
@@ -16,7 +15,6 @@ public enum TokenType {
         METHOD,FIELD,STATIC,VAR,INT,
         CHAR,BOOLEAN,VOID,TRUE,FALSE,
         NULL,THIS,LET,DO,IF,ELSE, RETURN,
-        EOF,
      
         // symbols
         LPAREN,RPAREN,
@@ -26,9 +24,9 @@ public enum TokenType {
         ASTERISK, SLASH,
         AND, OR, NOT,
         LT, GT,
+
+        EOF,
         ILLEGAL;
-
-
 
      static public boolean isSymbol (char c) {
         String symbols = "{}()[].,;+-*/&|<>=~";
@@ -39,11 +37,10 @@ public enum TokenType {
     static public boolean isKeyword (TokenType type) {
         List<TokenType> keywords  = 
             List.of(
-                METHOD,
-                WHILE,
-                IF,
-                CLASS,
-                CONSTRUCTOR
+                WHILE, CLASS,CONSTRUCTOR,FUNCTION,
+                METHOD,FIELD,STATIC,VAR,INT,
+                CHAR,BOOLEAN,VOID,TRUE,FALSE,
+                NULL,THIS,LET,DO,IF,ELSE, RETURN
             );
             return keywords.contains(type);
     }

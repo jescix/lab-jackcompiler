@@ -1,5 +1,4 @@
 package br.ufma.ecp;
-
 import static br.ufma.ecp.token.TokenType.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;

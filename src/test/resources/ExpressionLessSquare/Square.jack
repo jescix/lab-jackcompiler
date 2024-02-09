@@ -85,7 +85,7 @@ class Square {
       }
       return;
    }
-
+   /** Moves the square right by 2 pixels. */
    method void moveRight() {
       if (x) {
          do Screen.setColor(x);
