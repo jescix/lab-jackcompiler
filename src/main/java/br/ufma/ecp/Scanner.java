@@ -1,5 +1,4 @@
 package br.ufma.ecp;
-
 import static br.ufma.ecp.token.TokenType.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ public class Scanner {
     private int current;
     private int line = 1;
     private int start;
-
     private static final Map<String, TokenType> keywords;
  
     static {
@@ -48,13 +46,13 @@ public class Scanner {
         start = 0;
     }
 
-    
 
     public Token nextToken () {
 
         skipWhitespace();
 
         start = current;
+
         char ch = peek();
 
         if (Character.isDigit(ch)) {
@@ -190,9 +188,9 @@ public class Scanner {
                 c == '_';
       }
     
-      private boolean isAlphaNumeric(char c) {
+    private boolean isAlphaNumeric(char c) {
         return isAlpha(c) || Character.isDigit((c));
-      }
+    }
     
 
     private char peek () {
@@ -200,6 +198,7 @@ public class Scanner {
            return (char)input[current];
        return 0;
     }
+
     private char peekNext () {
         int next = current + 1;
         if ( next  < input.length) {
@@ -207,8 +206,7 @@ public class Scanner {
         } else {
             return 0;
         }
-   }
-
+    }
 
     private void skipBlockComments() {
         boolean endComment = false;
@@ -235,7 +233,7 @@ public class Scanner {
           }
     
         }
-      }
+    }
     
     private void skipLineComments() {
     
@@ -244,12 +242,12 @@ public class Scanner {
                     line++;
         }
     
-        private void skipWhitespace() {
-            char ch = peek();
-            while (ch == ' ' || ch == '\r' || ch == '\t' || ch == '\n') {
+    private void skipWhitespace() {
+        char ch = peek();
+        while (ch == ' ' || ch == '\r' || ch == '\t' || ch == '\n') {
     
-                if (ch == '\n')
-                    line++;
+            if (ch == '\n')
+                line++;
     
                 advance();
                 ch = peek();
