@@ -101,7 +101,7 @@ public class ParserTest extends TestSupport {
     // subroutineName '(' ')'
     @Test
     public void testParseSubroutineCall() {
-        var input = "hello();";
+        var input = "hello()";
         var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
         parser.parseSubroutineCall();
         
@@ -177,6 +177,31 @@ public class ParserTest extends TestSupport {
         <symbol> ; </symbol>
       </letStatement> 
 				""";
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
+        result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
+        assertEquals(expectedResult, result);
+    }
+
+
+
+    @Test
+    public void testParseDo() {
+        var input = "do hello();";
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseDo();
+
+        var expectedResult = """
+            <doStatement>
+            <keyword> do </keyword>
+            <subroutineCall>
+            <identifier> hello </identifier>
+            <symbol> ( </symbol>
+            <symbol> ) </symbol>
+            </subroutineCall>
+            <symbol> ; </symbol>
+          </doStatement>
+                """;
         var result = parser.XMLOutput();
         expectedResult = expectedResult.replaceAll("  ", "");
         result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
