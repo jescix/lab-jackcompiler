@@ -91,7 +91,7 @@ public class ParserTest extends TestSupport {
           </expression>
           """;
               
-          var result = parser.XMLOutput();
+          var result = parser.XMLOutput();  
           result = result.replaceAll("\r", ""); 
           expectedResult = expectedResult.replaceAll("  ", "");
           assertEquals(expectedResult, result);    
