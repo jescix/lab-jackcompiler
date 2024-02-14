@@ -110,8 +110,6 @@ public class ParserTest extends TestSupport {
           <identifier> hello </identifier>
           <symbol> ( </symbol>
           <symbol> ) </symbol>
-          <symbol> ; </symbol>
-          
           </subroutineCall>
           """;
               

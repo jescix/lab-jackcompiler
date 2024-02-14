@@ -27,11 +27,16 @@ public class Parser {
      public void parse () {
          
      }
+     //identifier '(' ')'
+     void parseSubroutineCall() {
+        printNonTerminal("subroutineCall");
+        expectPeek(IDENT);
+        expectPeek(LPAREN);
+        expectPeek(RPAREN);
+        
 
-     void parseSubroutineCal() {
-        printNonTerminal("subroutineCal");
 
-        printNonTerminal("/subroutineCal");
+        printNonTerminal("/subroutineCall");
 
 
 
