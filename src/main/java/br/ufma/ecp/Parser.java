@@ -72,7 +72,7 @@ public class Parser {
          return currentToken.type == type;
      }
  
-     private void expectPeek(TokenType... types) {
+     private void expectPeek(TokenType... types) {  //se for o token esperado, ele avança e imprime esse token
          for (TokenType type : types) {
              if (peekToken.type == type) {
                  expectPeek(type);

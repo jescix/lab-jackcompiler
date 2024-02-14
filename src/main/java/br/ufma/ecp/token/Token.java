@@ -19,7 +19,7 @@ public class Token {
             type =  "integerConstant";
 
         if (type.equals("STRING"))
-            type =  "stringConst";
+            type =  "stringConstant";
 
         if (type.equals("IDENT"))
             type =  "identifier";
