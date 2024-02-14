@@ -187,24 +187,73 @@ public class ParserTest extends TestSupport {
 
     @Test
     public void testParseDo() {
-        var input = "do hello();";
+        var input = "do Sys.wait(5);";
         var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
         parser.parseDo();
 
         var expectedResult = """
             <doStatement>
             <keyword> do </keyword>
-            <subroutineCall>
-            <identifier> hello </identifier>
+            <identifier> Sys </identifier>
+            <symbol> . </symbol>
+            <identifier> wait </identifier>
             <symbol> ( </symbol>
+            <expressionList>
+              <expression>
+                <term>
+                  <integerConstant> 5 </integerConstant>
+                </term>
+              </expression>
+            </expressionList>
             <symbol> ) </symbol>
-            </subroutineCall>
             <symbol> ; </symbol>
           </doStatement>
                 """;
         var result = parser.XMLOutput();
         expectedResult = expectedResult.replaceAll("  ", "");
         result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
+        assertEquals(expectedResult, result);
+    }
+
+
+
+
+
+
+    @Test
+    public void testParserWithLessSquareGame() throws IOException {
+        var input = fromFile("ExpressionLessSquare/SquareGame.jack");
+        var expectedResult =  fromFile("ExpressionLessSquare/SquareGame.xml");
+
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parse();
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testParserWithSquareGame() throws IOException {
+        var input = fromFile("Square/SquareGame.jack");
+        var expectedResult =  fromFile("Square/SquareGame.xml");
+
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parse();
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
+        assertEquals(expectedResult, result);
+    }
+
+
+    @Test
+    public void testParserWithSquare() throws IOException {
+        var input = fromFile("Square/Square.jack");
+        var expectedResult =  fromFile("Square/Square.xml");
+
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parse();
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
         assertEquals(expectedResult, result);
     }
 
