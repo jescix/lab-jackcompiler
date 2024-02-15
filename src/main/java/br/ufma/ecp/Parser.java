@@ -50,6 +50,36 @@ public class Parser {
 
     }
 
+    private void parseSubroutineDec() {
+
+        printNonTerminal("subroutineDec");
+        expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
+        expectPeek(VOID, INT, CHAR, BOOLEAN, IDENT);
+        expectPeek(IDENT);
+        expectPeek(LPAREN);
+        parseParameterList();
+        expectPeek(RPAREN);
+        parseSubroutineBody();
+        printNonTerminal("/subroutineDec");
+        
+    }
+
+    private void parseClassVarDec() {
+        
+        printNonTerminal("classVarDec");
+        expectPeek(FIELD, STATIC);
+        expectPeek(INT, CHAR, BOOLEAN, IDENT);
+        expectPeek(IDENT);
+
+        while (peekTokenIs(COMMA)) {
+            expectPeek(COMMA);
+            expectPeek(IDENT);
+        }
+
+        expectPeek(SEMICOLON);
+        printNonTerminal("/classVarDec");
+    }
+
     // 'do' subrotineCall ';'
      public void parseDo() {
         printNonTerminal("doStatement");
