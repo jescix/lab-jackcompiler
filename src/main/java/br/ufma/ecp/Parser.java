@@ -51,7 +51,6 @@ public class Parser {
     }
 
     private void parseSubroutineDec() {
-
         printNonTerminal("subroutineDec");
         expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
         expectPeek(VOID, INT, CHAR, BOOLEAN, IDENT);
@@ -62,6 +61,31 @@ public class Parser {
         parseSubroutineBody();
         printNonTerminal("/subroutineDec");
         
+    }
+
+    private void parseSubroutineBody() {
+        printNonTerminal("subroutineBody");
+        expectPeek(LBRACE);
+        while (peekTokenIs(VAR)) {
+            parseVarDec();
+        }
+        parseStatements();
+        expectPeek(RBRACE);
+        printNonTerminal("/subroutineBody");
+    }
+
+    private void parseParameterList() {
+        printNonTerminal("parameterList");
+        if (!peekTokenIs(RPAREN)) {
+            expectPeek(INT, CHAR, BOOLEAN, IDENT);
+            expectPeek(IDENT);
+        }
+        while (peekTokenIs(COMMA)) {
+            expectPeek(COMMA);
+            expectPeek(INT, CHAR, BOOLEAN, IDENT);
+            expectPeek(IDENT);
+        }
+        printNonTerminal("/parameterList");
     }
 
     private void parseClassVarDec() {
