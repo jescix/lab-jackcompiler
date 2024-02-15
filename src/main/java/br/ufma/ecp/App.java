@@ -1,4 +1,3 @@
-/*
 package br.ufma.ecp;
 
 import static br.ufma.ecp.token.TokenType.*;
@@ -52,10 +51,20 @@ public class App
         System.out.println(scan.nextToken());
         Token tk = new Token(NUMBER, "42");
         System.out.println(tk);
-        
+        */
     }
 }
-*/
+
+
+
+
+
+
+
+
+
+
+/* versão do professor
 
 package br.ufma.ecp;
 
@@ -160,3 +169,4 @@ public class App
 
 
 }
+*/

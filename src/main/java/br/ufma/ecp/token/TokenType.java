@@ -1,4 +1,4 @@
-/* 
+
 package br.ufma.ecp.token;
 import java.util.List;
 //import java.util.Map;
@@ -30,9 +30,7 @@ public enum TokenType {
         ILLEGAL;
 
      static public boolean isSymbol (char c) {
-        String symbols = "{}()[].,;+-*/
-        /*
-        &|<>=~";
+        String symbols = "{}()[].,;+-*/&|<>=~";
         return symbols.indexOf(c) > -1;
     }
 
@@ -47,9 +45,15 @@ public enum TokenType {
             );
             return keywords.contains(type);
     }
-
 }
-*/
+
+
+
+
+
+
+
+/* versão do professor
 package br.ufma.ecp.token;
 
 import java.util.Arrays;
@@ -118,12 +122,24 @@ public enum TokenType {
 
 
     static public boolean isSymbol (char c) {
-        String symbols = "{}()[].,;+-*/&|<>=~";
+        String symbols = "{}()[].,;+-*/
+        
+
+
+        /* 
+
+
+        
+        &|<>=~";
         return symbols.indexOf(c) > -1;
     }
 
     static public boolean isOperator(TokenType type) {
-        return "+-*/<>=~&|".contains(type.value);
+        return "+-*/
+        
+        /* 
+        
+        <>=~&|".contains(type.value);
     }
 
     static public TokenType keyword (String value) {
@@ -133,3 +149,4 @@ public enum TokenType {
 
     
 }
+*/

@@ -1,4 +1,4 @@
-/*
+
 package br.ufma.ecp;
 
 import static org.junit.Assert.assertEquals;
@@ -266,9 +266,9 @@ public class ParserTest extends TestSupport {
 }
 
 
-*/
 
 
+/* versão do professor
 package br.ufma.ecp;
 
 import java.nio.charset.StandardCharsets;
@@ -589,3 +589,5 @@ public class ParserTest extends TestSupport {
     }
 
 }
+
+*/

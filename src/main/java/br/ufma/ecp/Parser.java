@@ -1,4 +1,4 @@
-/* 
+
 
 package br.ufma.ecp;
 import br.ufma.ecp.token.Token;
@@ -161,10 +161,7 @@ public class Parser {
      // funções auxiliares
 
      static public boolean isOperator(String op) {
-        return op!= "" && "+-*/
-
-        /*
-        <>=~&|".contains(op);
+        return op!= "" && "+-*/<>=~&|".contains(op);
    }
 
 
@@ -227,12 +224,13 @@ public class Parser {
  
  
  }
-*/
 
 
 
 
 
+
+/* versão do professor
 
 
 
@@ -877,3 +875,5 @@ public class Parser {
     }
 
 }
+
+*/

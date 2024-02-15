@@ -1,4 +1,4 @@
-/* 
+ 
 package br.ufma.ecp.token;
 public class Token {
 
@@ -48,7 +48,7 @@ public class Token {
     
     
 }
-*/
+/* versão do professor
 package br.ufma.ecp.token;
 
 public class Token {
@@ -65,3 +65,4 @@ public class Token {
         return type.value;
     }
 }
+*/
