@@ -25,29 +25,23 @@ public class Parser {
  
      public void parse () {
         parseClass();
-         
      }
    
      
      private void parseClass() {
-
         printNonTerminal("class");
         expectPeek(CLASS);
         expectPeek(IDENT);
         expectPeek(LBRACE);
-
         while (peekTokenIs(STATIC) || peekTokenIs(FIELD)) {
             System.out.println(peekToken);
             parseClassVarDec();
         }
-
         while (peekTokenIs(FUNCTION) || peekTokenIs(CONSTRUCTOR) || peekTokenIs(METHOD)) {
             parseSubroutineDec();
         }
-
         expectPeek(RBRACE);
         printNonTerminal("/class");
-
     }
 
     private void parseSubroutineDec() {
@@ -149,7 +143,10 @@ public class Parser {
         expectPeek(IDENT);
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
-            expectPeek(IDENT);
+            expectPeek(IDENT); 
+        }
+        expectPeek(SEMICOLON);
+        printNonTerminal("/varDec");
     }
 
     private void parseParameterList() {
@@ -203,7 +200,7 @@ public class Parser {
             parseExpressionList();
             expectPeek(RPAREN);
         } else {
-            expectPeek(DOT);
+            //expectPeek(DOT);
             expectPeek(IDENT);
             expectPeek(LPAREN);
             parseExpressionList();
