@@ -108,6 +108,40 @@ public class Parser {
         }
     }
 
+    private void parseReturn() {
+        printNonTerminal("returnStatement");
+        expectPeek(RETURN);
+        if (!peekTokenIs(SEMICOLON)) {
+            parseExpression();
+        }
+        expectPeek(SEMICOLON);
+        printNonTerminal("/returnStatement");
+    }
+
+    private void parseIf() {
+        printNonTerminal("ifStatement");
+        expectPeek(IF);
+        expectPeek(LPAREN);
+        parseExpression();
+        expectPeek(RPAREN);
+        expectPeek(LBRACE);
+        parseStatements();
+        expectPeek(RBRACE);
+        printNonTerminal("/ifStatement");
+    }
+
+    private void parseWhile() {
+        printNonTerminal("whileStatement");
+        expectPeek(WHILE);
+        expectPeek(LPAREN);
+        parseExpression();
+        expectPeek(RPAREN);
+        expectPeek(LBRACE);
+        parseStatements();
+        expectPeek(RBRACE);
+        printNonTerminal("/whileStatement");
+    }
+
     private void parseVarDec() {
         printNonTerminal("varDec");
         expectPeek(VAR);
