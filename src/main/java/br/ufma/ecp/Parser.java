@@ -1,3 +1,4 @@
+
 package br.ufma.ecp;
 import br.ufma.ecp.token.Token;
 import br.ufma.ecp.token.TokenType;
@@ -164,17 +165,14 @@ public class Parser {
     }
 
     private void parseClassVarDec() {
-        
         printNonTerminal("classVarDec");
         expectPeek(FIELD, STATIC);
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
         expectPeek(IDENT);
-
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
             expectPeek(IDENT);
         }
-
         expectPeek(SEMICOLON);
         printNonTerminal("/classVarDec");
     }
@@ -189,11 +187,6 @@ public class Parser {
         printNonTerminal("/doStatement");
      }
 
-
-
-
-    // subroutineCall -> subroutineName '(' expressionList ')' | (className|varName)
-    // '.' subroutineName '(' expressionList ')
     void parseSubroutineCall() {
         if (peekTokenIs(LPAREN)) {
             expectPeek(LPAREN);
@@ -210,39 +203,30 @@ public class Parser {
 
     void parseExpressionList() {
         printNonTerminal("expressionList");
-
-        if (!peekTokenIs(RPAREN)) // verifica se tem pelo menos uma expressao
-        {
+        if (!peekTokenIs(RPAREN)) {
             parseExpression();
         }
-
-        // procurando as demais
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
             parseExpression();
         }
-
         printNonTerminal("/expressionList");
     }    
 
-     //letStatement -> 'let' identifier( '[' expression ']' )? '=' expression ';’
      void parseLet() {
         printNonTerminal("letStatement");
         expectPeek(LET);
         expectPeek(IDENT);
-
         if (peekTokenIs(LBRACKET)) {
             expectPeek(LBRACKET);
             parseExpression();
             expectPeek(RBRACKET);
         }
-
         expectPeek(EQ);
         parseExpression();
         expectPeek(SEMICOLON);
         printNonTerminal("/letStatement");
     }
-
 
      void parseExpression() {
         printNonTerminal("expression");
@@ -258,38 +242,50 @@ public class Parser {
      void parseTerm() {
         printNonTerminal("term");
         switch (peekToken.type) {
-          case NUMBER:
-            expectPeek(TokenType.NUMBER);
-            break;
-          case STRING:
-            expectPeek(TokenType.STRING);
-            break;
-          case FALSE:
-          case NULL:
-          case TRUE:
-            expectPeek(TokenType.FALSE, TokenType.NULL, TokenType.TRUE);
-            break;
-          case THIS:
-            expectPeek(TokenType.THIS);
-            break;
-          case IDENT:
-            expectPeek(TokenType.IDENT);
-            break;
-          default:
-            throw error(peekToken, "term expected");
+            case NUMBER:
+                expectPeek(NUMBER);
+                break;
+            case STRING:
+                expectPeek(STRING);
+                break;
+            case FALSE:
+            case NULL:
+            case TRUE:
+            case THIS:
+                expectPeek(FALSE, NULL, TRUE, THIS);
+                break;
+            case IDENT:
+                expectPeek(IDENT);
+                if (peekTokenIs(LPAREN) || peekTokenIs(DOT)) {
+                    parseSubroutineCall();
+                } else { // variavel comum ou array
+                    if (peekTokenIs(LBRACKET)) { // array
+                        expectPeek(LBRACKET);
+                        parseExpression();
+                        expectPeek(RBRACKET);
+                    }
+                }
+                break;
+            case LPAREN:
+                expectPeek(LPAREN);
+                parseExpression();
+                expectPeek(RPAREN);
+                break;
+            case MINUS:
+            case NOT:
+                expectPeek(MINUS, NOT);
+                parseTerm();
+                break;
+            default:
+                ;
         }
-    
-        printNonTerminal("/term");
-      }
- 
-     // funções auxiliares
+        printNonTerminal("/term");}
 
+
+     // funções auxiliares
      static public boolean isOperator(String op) {
         return op!= "" && "+-*/<>=~&|".contains(op);
    }
-
-
-
 
      public String XMLOutput() {
          return xmlOutput.toString();
@@ -298,7 +294,6 @@ public class Parser {
      private void printNonTerminal(String nterminal) {
          xmlOutput.append(String.format("<%s>\r\n", nterminal));
      }
- 
  
      boolean peekTokenIs(TokenType type) {
          return peekToken.type == type;
