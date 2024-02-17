@@ -25,7 +25,7 @@ public class Parser {
         parseClass();
     }
 
-    private void parseClass() {
+    void parseClass() {
         printNonTerminal("class");
         expectPeek(CLASS);
         expectPeek(IDENT);
@@ -41,7 +41,7 @@ public class Parser {
         printNonTerminal("/class");
     }
 
-    private void parseClassVarDec() {
+    void parseClassVarDec() {
         printNonTerminal("classVarDec");
         expectPeek(FIELD, STATIC);
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
@@ -54,7 +54,7 @@ public class Parser {
         printNonTerminal("/classVarDec");
     }
 
-    private void parseSubroutineDec() {
+    void parseSubroutineDec() {
         printNonTerminal("subroutineDec");
         expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
         expectPeek(VOID, INT, CHAR, BOOLEAN, IDENT);
@@ -67,7 +67,7 @@ public class Parser {
         
     }
 
-    private void parseParameterList() {
+    void parseParameterList() {
         printNonTerminal("parameterList");
         if (!peekTokenIs(RPAREN)) {
             expectPeek(INT, CHAR, BOOLEAN, IDENT);
@@ -81,7 +81,7 @@ public class Parser {
         printNonTerminal("/parameterList");
     }
 
-    private void parseSubroutineBody() {
+    void parseSubroutineBody() {
         printNonTerminal("subroutineBody");
         expectPeek(LBRACE);
         while (peekTokenIs(VAR)) {
@@ -92,7 +92,7 @@ public class Parser {
         printNonTerminal("/subroutineBody");
     }
 
-    private void parseVarDec() {
+    void parseVarDec() {
         printNonTerminal("varDec");
         expectPeek(VAR);
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
@@ -105,7 +105,7 @@ public class Parser {
         printNonTerminal("/varDec");
     }
 
-    private void parseStatements() {
+    void parseStatements() {
         printNonTerminal("statements");
         while (peekToken.type == WHILE ||
                 peekToken.type == IF ||
@@ -117,7 +117,7 @@ public class Parser {
         printNonTerminal("/statements");
     }
 
-    private void parseStatement() {
+    void parseStatement() {
         switch (peekToken.type) {
             case LET:
                 parseLet();
@@ -154,7 +154,7 @@ public class Parser {
         printNonTerminal("/letStatement");
 }
 
-    private void parseWhile() {
+    void parseWhile() {
         printNonTerminal("whileStatement");
         expectPeek(WHILE);
         expectPeek(LPAREN);
@@ -165,7 +165,7 @@ public class Parser {
         expectPeek(RBRACE);
         printNonTerminal("/whileStatement");
     }
-    private void parseIf() {
+    void parseIf() {
         printNonTerminal("ifStatement");
         expectPeek(IF);
         expectPeek(LPAREN);
@@ -177,7 +177,7 @@ public class Parser {
         printNonTerminal("/ifStatement");
     }
 
-    private void parseReturn() {
+    void parseReturn() {
         printNonTerminal("returnStatement");
         expectPeek(RETURN);
         if (!peekTokenIs(SEMICOLON)) {
@@ -187,7 +187,7 @@ public class Parser {
         printNonTerminal("/returnStatement");
     }
 
-    public void parseDo() {
+    void parseDo() {
         printNonTerminal("doStatement");
         expectPeek(DO);
         expectPeek(IDENT);
@@ -317,13 +317,11 @@ public class Parser {
         }
     }
 
-
     private static void report(int line, String where,
         String message) {
             System.err.println(
             "[line " + line + "] Error" + where + ": " + message);
     }
-
 
     private ParseError error(Token token, String message) {
         if (token.type == TokenType.EOF) {
@@ -333,6 +331,5 @@ public class Parser {
         }
         return new ParseError();
     }
-
 
 }
