@@ -11,6 +11,11 @@ public class Token {
         this.line = line;
     }
 
+    static public boolean isSymbol (String c) {
+        String symbols = "{}()[].,;+-*/&|<>=~";
+        return symbols.indexOf(c) > -1;
+    }
+
     public String toString() {
         var type = this.type.toString();
         String valor = lexeme;
