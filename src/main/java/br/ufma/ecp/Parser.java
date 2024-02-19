@@ -10,6 +10,7 @@ public class Parser {
     private Token currentToken;
     private Token peekToken;
     private StringBuilder xmlOutput = new StringBuilder();
+    private VMWriter vmWriter = new VMWriter();
  
     public Parser(byte[] input) {
         scan = new Scanner(input);
@@ -331,5 +332,8 @@ public class Parser {
         }
         return new ParseError();
     }
-
+    
+    public String VMOutput() {
+        return vmWriter.vmOutput();
+}
 }
