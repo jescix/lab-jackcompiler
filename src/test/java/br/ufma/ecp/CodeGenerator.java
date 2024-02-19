@@ -39,7 +39,7 @@ public class CodeGenerator extends TestSupport {
                 """;
             assertEquals(expected, actual);
     }
-
+    /*Literais strings*/
     @Test
     public void testLiteralString () {
         var input = """
@@ -62,7 +62,7 @@ public class CodeGenerator extends TestSupport {
             assertEquals(expected, actual);
     }
 
-
+    /*Literais keyword*/
     @Test
     public void testFalse () {
         var input = """
@@ -93,7 +93,6 @@ public class CodeGenerator extends TestSupport {
             assertEquals(expected, actual);
     }
 
-
     @Test
     public void testTrue () {
         var input = """
@@ -110,7 +109,6 @@ public class CodeGenerator extends TestSupport {
             assertEquals(expected, actual);
     }
 
-
     @Test
     public void testThis () {
         var input = """
@@ -126,6 +124,72 @@ public class CodeGenerator extends TestSupport {
             assertEquals(expected, actual);
     }
 
+
+    /*Operadores unários*/
+    @Test
+    public void testNot () {
+        var input = """
+            ~ false
+            """;
+        
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseExpression();
+        String actual = parser.VMOutput();
+        String expected = """
+                push constant 0   
+                not    
+                    """;
+            assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testMinus () {
+        var input = """
+            - 10
+            """;
+        
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseExpression();
+        String actual = parser.VMOutput();
+        String expected = """
+                push constant 10   
+                neg    
+                    """;
+            assertEquals(expected, actual);
+    }
+
+    /*Comandos: return*/
+    @Test
+    public void testReturn () {
+        var input = """
+            return;
+            """;
+        
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseStatement();
+        String actual = parser.VMOutput();
+        String expected = """
+                push constant 0
+                return       
+                    """;
+            assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReturnExpr () {
+        var input = """
+            return 10;
+            """;
+        
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseStatement();
+        String actual = parser.VMOutput();
+        String expected = """
+                push constant 10
+                return       
+                    """;
+            assertEquals(expected, actual);
+    }
 
 
 }
