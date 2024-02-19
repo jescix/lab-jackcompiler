@@ -3,11 +3,10 @@ java -cp target/jackcompiler-1.0-SNAPSHOT.jar br.ufma.ecp.App
 
 
 
-Compiladores - Implementação do Analisador Léxico da Linguagem Jack.
-Professor: Sergio Costa.
-Alunos: Jessica Cristina Santos do Nascimento (2021061674) e Victor Valvan Alves Freitas (2022013789).
+Compiladores - Implementação do Analisador Sintático da Linguagem Jack com base na seguinte anotação:
 
-Etapas Concluídas:
-    Implementação do analisador léxico
-    Definição dos tipos de tokens suportados
-    Definição dos casos de teste para o analisador léxico
+https://profsergiocosta.notion.site/Analisador-sint-tico-86562d62ee214064b7a3468d63658801
+
+Professor: Sergio Costa.
+
+Alunos: Jessica Cristina Santos do Nascimento (2021061674) e Victor Valvan Alves Freitas (2022013789).
