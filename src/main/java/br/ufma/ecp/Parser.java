@@ -226,14 +226,16 @@ public class Parser {
 
     void parseExpression() {
         printNonTerminal("expression");
-        parseTerm ();
-        while (isOperator(peekToken.lexeme)) {
+        parseTerm();
+        while (isOperator(peekToken.type)) {
+            var ope = peekToken.type;
             expectPeek(peekToken.type);
             parseTerm();
+            compileOperators(ope);
         }
         printNonTerminal("/expression");
     }
-
+    
     void parseTerm() {
         printNonTerminal("term");
         switch (peekToken.type) {
