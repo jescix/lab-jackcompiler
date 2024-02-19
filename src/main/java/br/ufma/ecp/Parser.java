@@ -160,16 +160,31 @@ public class Parser {
         parseExpression();
         expectPeek(SEMICOLON);
         printNonTerminal("/letStatement");
-}
-
+    }
+    
     void parseWhile() {
         printNonTerminal("whileStatement");
+
+        var labelTrue = "WHILE_EXP" + whileLabelNum;
+        var labelFalse = "WHILE_END" + whileLabelNum;
+        whileLabelNum++;
+
+        vmWriter.writeLabel(labelTrue);
+
         expectPeek(WHILE);
         expectPeek(LPAREN);
         parseExpression();
+
+        vmWriter.writeArithmetic(Command.NOT);
+        vmWriter.writeIf(labelFalse);
+
         expectPeek(RPAREN);
         expectPeek(LBRACE);
         parseStatements();
+
+        vmWriter.writeGoto(labelTrue); // Go back to labelTrue and check condition
+        vmWriter.writeLabel(labelFalse); // Breaks out of while loop because ~(condition) is true
+
         expectPeek(RBRACE);
         printNonTerminal("/whileStatement");
     }
@@ -201,10 +216,9 @@ public class Parser {
 
             vmWriter.writeLabel(labelFalse);
 
-            if (peekTokenIs(ELSE))
-            {
+            if (peekTokenIs(ELSE)){
                 expectPeek(ELSE);
-                expectPeek(LBRACE)
+                expectPeek(LBRACE);
                 parseStatements();
                 expectPeek(RBRACE);
                 vmWriter.writeLabel(labelEnd);
