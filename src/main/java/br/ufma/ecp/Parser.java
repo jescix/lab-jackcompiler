@@ -278,7 +278,7 @@ public class Parser {
     void parseExpression() {
         printNonTerminal("expression");
         parseTerm();
-        while (isOperator(peekToken.type)) {
+        while (isOperator(peekToken.lexeme)) {
             var ope = peekToken.type;
             expectPeek(peekToken.type);
             parseTerm();
