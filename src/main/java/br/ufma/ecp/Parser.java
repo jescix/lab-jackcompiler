@@ -238,16 +238,23 @@ public class Parser {
         printNonTerminal("/expression");
     }
     
+
     void parseTerm() {
         printNonTerminal("term");
         switch (peekToken.type) {
             case NUMBER:
                 expectPeek(NUMBER);
-
                 vmWriter.writePush(Segment.CONST, Integer.parseInt(currentToken.lexeme));
                 break;
             case STRING:
-                expectPeek(STRING);
+                expectPeek(TokenType.STRING);
+                var strValue = currentToken.lexeme;
+                vmWriter.writePush(Segment.CONST, strValue.length());
+                vmWriter.writeCall("String.new", 1);
+                for (int i = 0; i < strValue.length(); i++) {
+                    vmWriter.writePush(Segment.CONST, strValue.charAt(i));
+                    vmWriter.writeCall("String.appendChar", 2);
+                }
                 break;
             case FALSE:
             case NULL:
