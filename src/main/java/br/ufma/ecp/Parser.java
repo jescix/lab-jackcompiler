@@ -74,24 +74,26 @@ public class Parser {
         expectPeek(SEMICOLON);
         printNonTerminal("/classVarDec");
     }
-    
-    void parseSubroutineDec() {
-        
-        printNonTerminal("subroutineDec");
 
+    void parseSubroutineDec() {
+        printNonTerminal("subroutineDec");
         ifLabelNum = 0;
         whileLabelNum = 0;
-        
         symTable.startSubroutine();
-
-        expectPeek(TokenType.CONSTRUCTOR, TokenType.FUNCTION, TokenType.METHOD);
+        expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
         var subroutineType = currentToken.type;
-      
-
-
         if (subroutineType == METHOD) {
             symTable.define("this", className, Kind.ARG);
-        };
+        }
+        expectPeek(VOID, INT, CHAR, BOOLEAN, IDENT);
+        expectPeek(IDENT);
+        var functionName = className + "." + currentToken.lexeme;
+        expectPeek(LPAREN);
+        parseParameterList();
+        expectPeek(RPAREN);
+        parseSubroutineBody(functionName, subroutineType);
+        printNonTerminal("/subroutineDec");
+    }
 
     void parseParameterList() {
         printNonTerminal("parameterList");
