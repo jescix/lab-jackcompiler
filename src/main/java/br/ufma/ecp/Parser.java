@@ -119,12 +119,26 @@ public class Parser {
     void parseVarDec() {
         printNonTerminal("varDec");
         expectPeek(VAR);
+
+        SymbolTable.Kind kind = Kind.VAR;
+
+        // 'int' | 'char' | 'boolean' | className
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
+        String type = currentToken.lexeme;
+
         expectPeek(IDENT);
+        String name = currentToken.lexeme;
+        symTable.define(name, type, kind);
+
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
-            expectPeek(IDENT); 
+            expectPeek(IDENT);
+
+            name = currentToken.lexeme;
+            symTable.define(name, type, kind);
+
         }
+
         expectPeek(SEMICOLON);
         printNonTerminal("/varDec");
     }
