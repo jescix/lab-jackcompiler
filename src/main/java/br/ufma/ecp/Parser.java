@@ -71,22 +71,17 @@ public class Parser {
         SymbolTable.Kind kind = Kind.STATIC;
         if (currentTokenIs(FIELD)) 
             kind = Kind.FIELD;
-
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
         String type = currentToken.lexeme;
-
         expectPeek(IDENT);
         String name = currentToken.lexeme;
-
         symTable.define(name, type, kind);
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
             expectPeek(IDENT);
-
             name = currentToken.lexeme;
             symTable.define(name, type, kind);
         }
-
         expectPeek(SEMICOLON);
         printNonTerminal("/classVarDec");
     }
@@ -113,29 +108,21 @@ public class Parser {
 
     void parseParameterList() {
         printNonTerminal("parameterList");
-
         SymbolTable.Kind kind = Kind.ARG;
-
-        if (!peekTokenIs(RPAREN)) // verifica se tem pelo menos uma expressao
-        {
+        if (!peekTokenIs(RPAREN)) {
             expectPeek(INT, CHAR, BOOLEAN, IDENT);
             String type = currentToken.lexeme;
-
             expectPeek(IDENT);
             String name = currentToken.lexeme;
             symTable.define(name, type, kind);
-
             while (peekTokenIs(COMMA)) {
                 expectPeek(COMMA);
                 expectPeek(INT, CHAR, BOOLEAN, IDENT);
                 type = currentToken.lexeme;
-
                 expectPeek(IDENT);
                 name = currentToken.lexeme;
-
                 symTable.define(name, type, kind);
             }
-
         }
 
         printNonTerminal("/parameterList");
@@ -147,9 +134,17 @@ public class Parser {
         while (peekTokenIs(VAR)) {
             parseVarDec();
         }
-				var nlocals = symTable.varCount(Kind.VAR);
-
+		var nlocals = symTable.varCount(Kind.VAR);
         vmWriter.writeFunction(functionName, nlocals);
+        if (subroutineType == CONSTRUCTOR) {
+            vmWriter.writePush(Segment.CONST, symTable.varCount(Kind.FIELD));
+            vmWriter.writeCall("Memory.alloc", 1);
+            vmWriter.writePop(Segment.POINTER, 0);
+        }
+        if (subroutineType == METHOD) {
+            vmWriter.writePush(Segment.ARG, 0);
+            vmWriter.writePop(Segment.POINTER, 0);
+        }
         parseStatements();
         expectPeek(RBRACE);
         printNonTerminal("/subroutineBody");
@@ -188,21 +183,27 @@ public class Parser {
 
     void parseStatement() {
         switch (peekToken.type) {
+
             case LET:
                 parseLet();
                 break;
+
             case WHILE:
                 parseWhile();
                 break;
+
             case IF:
                 parseIf();
                 break;
+
             case RETURN:
                 parseReturn();
                 break;
+
             case DO:
                 parseDo();
                 break;
+
             default:
                 throw error(peekToken, "Expected a statement");
         }
@@ -251,8 +252,8 @@ public class Parser {
         expectPeek(RPAREN);
         expectPeek(LBRACE);
         parseStatements();
-        vmWriter.writeGoto(labelTrue); // Go back to labelTrue and check condition
-        vmWriter.writeLabel(labelFalse); // Breaks out of while loop because ~(condition) is true
+        vmWriter.writeGoto(labelTrue); 
+        vmWriter.writeLabel(labelFalse);
         expectPeek(RBRACE);
         printNonTerminal("/whileStatement");
     }
@@ -273,11 +274,11 @@ public class Parser {
         expectPeek(LBRACE);
         parseStatements();
         expectPeek(RBRACE);
-        if (peekTokenIs(ELSE)){
+        if (peekTokenIs(ELSE)) {
             vmWriter.writeGoto(labelEnd);
         }
         vmWriter.writeLabel(labelFalse);
-        if (peekTokenIs(ELSE)){
+        if (peekTokenIs(ELSE)) {
             expectPeek(ELSE);
             expectPeek(LBRACE);
             parseStatements();
@@ -292,12 +293,12 @@ public class Parser {
         expectPeek(RETURN);
         if (!peekTokenIs(SEMICOLON)) {
             parseExpression();
-        } else {
+        } 
+        else {
             vmWriter.writePush(Segment.CONST, 0);
         }
         expectPeek(SEMICOLON);
         vmWriter.writeReturn();
-
         printNonTerminal("/returnStatement");
     }
 
