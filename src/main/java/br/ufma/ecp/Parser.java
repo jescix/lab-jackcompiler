@@ -90,18 +90,34 @@ public class Parser {
         whileLabelNum = 0;
         
     }
-
+    
     void parseParameterList() {
         printNonTerminal("parameterList");
-        if (!peekTokenIs(RPAREN)) {
+
+        SymbolTable.Kind kind = Kind.ARG;
+
+        if (!peekTokenIs(RPAREN)) // verifica se tem pelo menos uma expressao
+        {
             expectPeek(INT, CHAR, BOOLEAN, IDENT);
+            String type = currentToken.lexeme;
+
             expectPeek(IDENT);
+            String name = currentToken.lexeme;
+            symTable.define(name, type, kind);
+
+            while (peekTokenIs(COMMA)) {
+                expectPeek(COMMA);
+                expectPeek(INT, CHAR, BOOLEAN, IDENT);
+                type = currentToken.lexeme;
+
+                expectPeek(IDENT);
+                name = currentToken.lexeme;
+
+                symTable.define(name, type, kind);
+            }
+
         }
-        while (peekTokenIs(COMMA)) {
-            expectPeek(COMMA);
-            expectPeek(INT, CHAR, BOOLEAN, IDENT);
-            expectPeek(IDENT);
-        }
+
         printNonTerminal("/parameterList");
     }
 
@@ -115,7 +131,7 @@ public class Parser {
         expectPeek(RBRACE);
         printNonTerminal("/subroutineBody");
     }
-    
+
     void parseVarDec() {
         printNonTerminal("varDec");
         expectPeek(VAR);
