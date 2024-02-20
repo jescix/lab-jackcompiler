@@ -314,10 +314,10 @@ public class Parser {
 
         var nArgs = 0;
         var ident = currentToken.lexeme;
-        var symbol = symTable.resolve(ident); // classe ou objeto
+        var symbol = symTable.resolve(ident);
         var functionName = ident + ".";
 
-        if (peekTokenIs(LPAREN)) { // método da propria classe
+        if (peekTokenIs(LPAREN)) { 
             expectPeek(LPAREN);
             vmWriter.writePush(Segment.POINTER, 0);
             nArgs = parseExpressionList() + 1;
@@ -342,17 +342,21 @@ public class Parser {
         vmWriter.writeCall(functionName, nArgs);
     }
 
-    void parseExpressionList() {
+    int parseExpressionList() {
         printNonTerminal("expressionList");
+        var nArgs = 0;
         if (!peekTokenIs(RPAREN)) {
             parseExpression();
+            nArgs = 1;
         }
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
             parseExpression();
+            nArgs++;
         }
         printNonTerminal("/expressionList");
-    }    
+        return nArgs;
+    }   
 
     void parseExpression() {
         printNonTerminal("expression");
