@@ -3,31 +3,39 @@ package br.ufma.ecp;
 import br.ufma.ecp.token.Token;
 import br.ufma.ecp.token.TokenType;
 import static br.ufma.ecp.token.TokenType.*;
-
 import br.ufma.ecp.SymbolTable.Symbol;
 import br.ufma.ecp.VMWriter.Command;
 import br.ufma.ecp.VMWriter.Segment;
+import br.ufma.ecp.SymbolTable.Kind;
 
 public class Parser {
-    private static class ParseError extends RuntimeException {
 
+    private static class ParseError extends RuntimeException {
     }
 
     private Scanner scan;
     private Token currentToken;
     private Token peekToken;
+
     private StringBuilder xmlOutput = new StringBuilder();
     private VMWriter vmWriter = new VMWriter();
     private SymbolTable symTable = new SymbolTable();
     private String className = "";
-    
-    /*variaveis para o if e while */
     private int ifLabelNum = 0 ;
     private int whileLabelNum = 0;
  
     public Parser(byte[] input) {
+
         scan = new Scanner(input);
         nextToken();
+
+        /* 
+        symbolTable = new SymbolTable();
+        vmWriter = new VMWriter();
+        ifLabelNum = 0;
+        whileLabelNum = 0;
+        */
+        
     }
 
     private void nextToken() {
