@@ -130,12 +130,15 @@ public class Parser {
         printNonTerminal("/parameterList");
     }
 
-    void parseSubroutineBody() {
+    void parseSubroutineBody(String functionName, TokenType subroutineType) {
         printNonTerminal("subroutineBody");
         expectPeek(LBRACE);
         while (peekTokenIs(VAR)) {
             parseVarDec();
         }
+				var nlocals = symTable.varCount(Kind.VAR);
+
+        vmWriter.writeFunction(functionName, nlocals);
         parseStatements();
         expectPeek(RBRACE);
         printNonTerminal("/subroutineBody");
