@@ -213,18 +213,24 @@ public class Parser {
         printNonTerminal("letStatement");
         expectPeek(TokenType.LET);
         expectPeek(TokenType.IDENT);
-        var symbol = symbolTable.resolve(currentToken.lexeme);
-        if (peekTokenIs(TokenType.LBRACKET)) {
-            expectPeek(TokenType.LBRACKET);
-            parseExpression();         
-            expectPeek(TokenType.RBRACKET);
-
+        var symbol = symTable.resolve(currentToken.lexeme);
+        if (peekTokenIs(LBRACKET)) {
+            expectPeek(LBRACKET);
+            parseExpression();
+            vmWriter.writePush(kind2Segment(symbol.kind()), symbol.index());
+            vmWriter.writeArithmetic(Command.ADD);
+            expectPeek(RBRACKET);
             isArray = true;
         }
-        expectPeek(TokenType.EQ);
+        expectPeek(EQ);
         parseExpression();
         if (isArray) {
-        } else {
+            vmWriter.writePop(Segment.TEMP, 0);    // push result back onto stack
+            vmWriter.writePop(Segment.POINTER, 1); // pop address pointer into pointer 1
+            vmWriter.writePush(Segment.TEMP, 0);   // push result back onto stack
+            vmWriter.writePop(Segment.THAT, 0);    // Store right hand side evaluation in THAT 0.
+        } 
+        else {
             vmWriter.writePop(kind2Segment(symbol.kind()), symbol.index());
         }
         expectPeek(TokenType.SEMICOLON);
@@ -383,7 +389,8 @@ public class Parser {
                 Symbol sym = symTable.resolve(currentToken.lexeme);
                 if (peekTokenIs(TokenType.LPAREN) || peekTokenIs(TokenType.DOT)) {
                     parseSubroutineCall();
-                } else { 
+                } 
+                else { 
                     if (peekTokenIs(TokenType.LBRACKET)) { 
                         expectPeek(TokenType.LBRACKET);
                         parseExpression();   
@@ -424,7 +431,6 @@ public class Parser {
     }
 
     /*Funções Auxiliares */
-
     static public boolean isOperator(String op) {
         return op!= "" && "+-*/<>=~&|".contains(op);
     }
