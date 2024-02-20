@@ -1,13 +1,8 @@
 package br.ufma.ecp;
-
 import java.nio.charset.StandardCharsets;
-
 import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
-
 import org.junit.Test;
-
 public class ParserTest extends TestSupport {
 
     @Test

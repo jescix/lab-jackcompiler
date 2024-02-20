@@ -513,12 +513,13 @@ public class Parser {
     }
 
     public void compileOperators(TokenType type) {
-
         if (type == ASTERISK) {
             vmWriter.writeCall("Math.multiply", 2);
-        } else if (type == SLASH) {
+        } 
+        else if (type == SLASH) {
             vmWriter.writeCall("Math.divide", 2);
-        } else {
+        } 
+        else {
             vmWriter.writeArithmetic(typeOperator(type));
         }
     }
@@ -540,8 +541,6 @@ public class Parser {
             return Command.OR;
         return null;
     }
-
-
 
     /*funcao que converte kind para segment*/
     private Segment kind2Segment(Kind kind) {
