@@ -21,6 +21,7 @@ public class Parser {
     private VMWriter vmWriter = new VMWriter();
     private SymbolTable symTable = new SymbolTable();
     private String className = "";
+
     private int ifLabelNum = 0 ;
     private int whileLabelNum = 0;
  
@@ -35,7 +36,7 @@ public class Parser {
         ifLabelNum = 0;
         whileLabelNum = 0;
         */
-        
+
     }
 
     private void nextToken() {
@@ -54,7 +55,7 @@ public class Parser {
         className = currentToken.lexeme;
         expectPeek(LBRACE);
         while (peekTokenIs(STATIC) || peekTokenIs(FIELD)) {
-            System.out.println(peekToken);
+            //System.out.println(peekToken);
             parseClassVarDec();
         }
         while (peekTokenIs(FUNCTION) || peekTokenIs(CONSTRUCTOR) || peekTokenIs(METHOD)) {
@@ -68,7 +69,7 @@ public class Parser {
         printNonTerminal("classVarDec");
         expectPeek(FIELD, STATIC);
         SymbolTable.Kind kind = Kind.STATIC;
-        if (currentTokenIs(FIELD))
+        if (currentTokenIs(FIELD)) 
             kind = Kind.FIELD;
 
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
@@ -157,26 +158,18 @@ public class Parser {
     void parseVarDec() {
         printNonTerminal("varDec");
         expectPeek(VAR);
-
         SymbolTable.Kind kind = Kind.VAR;
-
-        // 'int' | 'char' | 'boolean' | className
         expectPeek(INT, CHAR, BOOLEAN, IDENT);
         String type = currentToken.lexeme;
-
         expectPeek(IDENT);
         String name = currentToken.lexeme;
         symTable.define(name, type, kind);
-
         while (peekTokenIs(COMMA)) {
             expectPeek(COMMA);
             expectPeek(IDENT);
-
             name = currentToken.lexeme;
             symTable.define(name, type, kind);
-
         }
-
         expectPeek(SEMICOLON);
         printNonTerminal("/varDec");
     }
@@ -393,8 +386,12 @@ public class Parser {
                 } else { 
                     if (peekTokenIs(TokenType.LBRACKET)) { 
                         expectPeek(TokenType.LBRACKET);
-                        parseExpression();                        
-                        expectPeek(TokenType.RBRACKET);                       
+                        parseExpression();   
+                        vmWriter.writePush(kind2Segment(sym.kind()), sym.index());
+                        vmWriter.writeArithmetic(Command.ADD);
+                        expectPeek(TokenType.RBRACKET);   
+                        vmWriter.writePop(Segment.POINTER, 1); // pop address pointer into pointer 1
+                        vmWriter.writePush(Segment.THAT, 0);
                     } else {
                         vmWriter.writePush(kind2Segment(sym.kind()), sym.index());
                     }
