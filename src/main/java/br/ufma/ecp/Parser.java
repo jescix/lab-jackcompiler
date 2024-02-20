@@ -493,4 +493,24 @@ public class Parser {
             return Command.OR;
         return null;
     }
+
+
+
+    /*funcao que converte kind para segment*/
+    private Segment kind2Segment(Kind kind) {
+        if (kind == Kind.STATIC)
+            return Segment.STATIC;
+        if (kind == Kind.FIELD)
+            return Segment.THIS;
+        if (kind == Kind.VAR)
+            return Segment.LOCAL;
+        if (kind == Kind.ARG)
+            return Segment.ARG;
+        return null;
+    }
+
+
+
+
+
 }
