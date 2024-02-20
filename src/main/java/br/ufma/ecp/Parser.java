@@ -76,22 +76,33 @@ public class Parser {
     }
 
     void parseSubroutineDec() {
-        
         printNonTerminal("subroutineDec");
 
         ifLabelNum = 0;
         whileLabelNum = 0;
-        
-        symTable.startSubroutine();
 
-        expectPeek(TokenType.CONSTRUCTOR, TokenType.FUNCTION, TokenType.METHOD);
+        symbolTable.startSubroutine();
+
+        expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
         var subroutineType = currentToken.type;
-      
-
 
         if (subroutineType == METHOD) {
-            symTable.define("this", className, Kind.ARG);
-        };
+            symbolTable.define("this", className, Kind.ARG);
+        }
+
+        // 'int' | 'char' | 'boolean' | className
+        expectPeek(VOID, INT, CHAR, BOOLEAN, IDENTIFIER);
+        expectPeek(IDENTIFIER);
+
+        var functionName = className + "." + currentToken.lexeme;
+
+        expectPeek(LPAREN);
+        parseParameterList();
+        expectPeek(RPAREN);
+        parseSubroutineBody(functionName, subroutineType);
+
+        printNonTerminal("/subroutineDec");
+    }
 
     void parseParameterList() {
         printNonTerminal("parameterList");
