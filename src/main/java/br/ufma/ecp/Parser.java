@@ -13,6 +13,8 @@ public class Parser {
     private Token peekToken;
     private StringBuilder xmlOutput = new StringBuilder();
     private VMWriter vmWriter = new VMWriter();
+    
+    /*variaveis para o if e while */
     private int ifLabelNum = 0 ;
     private int whileLabelNum = 0;
  
@@ -164,68 +166,54 @@ public class Parser {
     
     void parseWhile() {
         printNonTerminal("whileStatement");
-
         var labelTrue = "WHILE_EXP" + whileLabelNum;
         var labelFalse = "WHILE_END" + whileLabelNum;
         whileLabelNum++;
-
         vmWriter.writeLabel(labelTrue);
-
         expectPeek(WHILE);
         expectPeek(LPAREN);
         parseExpression();
-
         vmWriter.writeArithmetic(Command.NOT);
         vmWriter.writeIf(labelFalse);
-
         expectPeek(RPAREN);
         expectPeek(LBRACE);
         parseStatements();
-
         vmWriter.writeGoto(labelTrue); // Go back to labelTrue and check condition
         vmWriter.writeLabel(labelFalse); // Breaks out of while loop because ~(condition) is true
-
         expectPeek(RBRACE);
         printNonTerminal("/whileStatement");
     }
 
     void parseIf() {
-            printNonTerminal("ifStatement");
-
-            var labelTrue = "IF_TRUE" + ifLabelNum;
-            var labelFalse = "IF_FALSE" + ifLabelNum;
-            var labelEnd = "IF_END" + ifLabelNum;
-
-            ifLabelNum++;
-        
-            expectPeek(IF);
-            expectPeek(LPAREN);
-            parseExpression();
-            expectPeek(RPAREN);
-
-            vmWriter.writeIf(labelTrue);
-            vmWriter.writeGoto(labelFalse);
-            vmWriter.writeLabel(labelTrue);
-        
+        printNonTerminal("ifStatement");
+        var labelTrue = "IF_TRUE" + ifLabelNum;
+        var labelFalse = "IF_FALSE" + ifLabelNum;
+        var labelEnd = "IF_END" + ifLabelNum;
+        ifLabelNum++;
+        expectPeek(IF);
+        expectPeek(LPAREN);
+        parseExpression();
+        expectPeek(RPAREN);
+        vmWriter.writeIf(labelTrue);
+        vmWriter.writeGoto(labelFalse);
+        vmWriter.writeLabel(labelTrue);
+        expectPeek(LBRACE);
+        parseStatements();
+        expectPeek(RBRACE);
+        if (peekTokenIs(ELSE)){
+            vmWriter.writeGoto(labelEnd);
+        }
+        vmWriter.writeLabel(labelFalse);
+        if (peekTokenIs(ELSE)){
+            expectPeek(ELSE);
             expectPeek(LBRACE);
             parseStatements();
             expectPeek(RBRACE);
-            if (peekTokenIs(ELSE)){
-                vmWriter.writeGoto(labelEnd);
-            }
-
-            vmWriter.writeLabel(labelFalse);
-
-            if (peekTokenIs(ELSE)){
-                expectPeek(ELSE);
-                expectPeek(LBRACE);
-                parseStatements();
-                expectPeek(RBRACE);
-                vmWriter.writeLabel(labelEnd);
-            }
-
-            printNonTerminal("/ifStatement");
+            vmWriter.writeLabel(labelEnd);
         }
+        printNonTerminal("/ifStatement");
+    }
+
     void parseReturn() {
         printNonTerminal("returnStatement");
         expectPeek(RETURN);
@@ -290,10 +278,12 @@ public class Parser {
     void parseTerm() {
         printNonTerminal("term");
         switch (peekToken.type) {
+
             case NUMBER:
                 expectPeek(NUMBER);
                 vmWriter.writePush(Segment.CONST, Integer.parseInt(currentToken.lexeme));
                 break;
+
             case STRING:
                 expectPeek(TokenType.STRING);
                 var strValue = currentToken.lexeme;
@@ -304,18 +294,23 @@ public class Parser {
                     vmWriter.writeCall("String.appendChar", 2);
                 }
                 break;
+
             case FALSE:
+
             case NULL:
+
             case TRUE:
                 expectPeek(FALSE, NULL, TRUE);
                 vmWriter.writePush(Segment.CONST, 0);
                 if (currentToken.type == TRUE)
                     vmWriter.writeArithmetic(Command.NOT);
                 break;
+
             case THIS:
                 expectPeek(THIS);
                 vmWriter.writePush(Segment.POINTER, 0);
                 break;
+
             case IDENT:
                 expectPeek(IDENT);
                 if (peekTokenIs(LPAREN) || peekTokenIs(DOT)) {
@@ -328,12 +323,15 @@ public class Parser {
                     }
                 }
                 break;
+
             case LPAREN:
                 expectPeek(LPAREN);
                 parseExpression();
                 expectPeek(RPAREN);
                 break;
+
             case MINUS:
+
             case NOT:
                 expectPeek(MINUS, NOT);
                 var op = currentToken.type;
@@ -344,6 +342,7 @@ public class Parser {
                     vmWriter.writeArithmetic(Command.NOT);
 
                 break;
+                
             default:
                 ;
         }
