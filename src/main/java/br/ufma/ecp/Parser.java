@@ -311,17 +311,35 @@ public class Parser {
     }
 
     void parseSubroutineCall() {
-        if (peekTokenIs(LPAREN)) {
+
+        var nArgs = 0;
+        var ident = currentToken.lexeme;
+        var symbol = symTable.resolve(ident); // classe ou objeto
+        var functionName = ident + ".";
+
+        if (peekTokenIs(LPAREN)) { // método da propria classe
             expectPeek(LPAREN);
-            parseExpressionList();
+            vmWriter.writePush(Segment.POINTER, 0);
+            nArgs = parseExpressionList() + 1;
             expectPeek(RPAREN);
-        } else {
+            functionName = className + "." + ident;
+        } 
+        else {
             expectPeek(DOT);
-            expectPeek(IDENT);
+            expectPeek(IDENT); 
+            if (symbol != null) { 
+                functionName = symbol.type() + "." + currentToken.lexeme;
+                vmWriter.writePush(kind2Segment(symbol.kind()), symbol.index());
+                nArgs = 1; 
+            } 
+            else {
+                functionName += currentToken.lexeme; // é uma função
+            }
             expectPeek(LPAREN);
-            parseExpressionList();
+            nArgs += parseExpressionList();
             expectPeek(RPAREN);
         }
+        vmWriter.writeCall(functionName, nArgs);
     }
 
     void parseExpressionList() {
