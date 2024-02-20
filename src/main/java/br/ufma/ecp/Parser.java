@@ -321,6 +321,7 @@ public class Parser {
 
             printNonTerminal("/ifStatement");
         }
+
     void parseReturn() {
         printNonTerminal("returnStatement");
         expectPeek(RETURN);
@@ -345,17 +346,39 @@ public class Parser {
     }
 
     void parseSubroutineCall() {
-        if (peekTokenIs(LPAREN)) {
+
+        var nArgs = 0;
+
+        var ident = currentToken.value();
+        var symbol = symbolTable.resolve(ident); // classe ou objeto
+        var functionName = ident + ".";
+
+        if (peekTokenIs(LPAREN)) { // método da propria classe
             expectPeek(LPAREN);
-            parseExpressionList();
+            vmWriter.writePush(Segment.POINTER, 0);
+            nArgs = parseExpressionList() + 1;
             expectPeek(RPAREN);
+            functionName = className + "." + ident;
         } else {
+            // pode ser um metodo de um outro objeto ou uma função
             expectPeek(DOT);
-            expectPeek(IDENT);
+            expectPeek(IDENTIFIER); // nome da função
+
+            if (symbol != null) { // é um metodo
+                functionName = symbol.type() + "." + currentToken.value();
+                vmWriter.writePush(kind2Segment(symbol.kind()), symbol.index());
+                nArgs = 1; // do proprio objeto
+            } else {
+                functionName += currentToken.value(); // é uma função
+            }
+
             expectPeek(LPAREN);
-            parseExpressionList();
+            nArgs += parseExpressionList();
+
             expectPeek(RPAREN);
         }
+
+        vmWriter.writeCall(functionName, nArgs);
     }
 
     void parseExpressionList() {
@@ -451,7 +474,6 @@ public class Parser {
     }
 
     /*Funções Auxiliares */
-
     static public boolean isOperator(String op) {
         return op!= "" && "+-*/<>=~&|".contains(op);
     }
