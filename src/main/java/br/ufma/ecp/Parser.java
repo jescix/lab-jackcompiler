@@ -13,6 +13,7 @@ public class Parser {
     private Token peekToken;
     private StringBuilder xmlOutput = new StringBuilder();
     private VMWriter vmWriter = new VMWriter();
+    private SymbolTable symTable = new SymbolTable();
     
     /*variaveis para o if e while */
     private int ifLabelNum = 0 ;
