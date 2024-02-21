@@ -409,6 +409,35 @@ public class CodeGenerator extends TestSupport {
  
     }
 
-
+    @Test
+    public void methodTest () {
+        var input = """
+            class Main {
+                function void main () {
+                    var Point p;
+                    var int x;
+                    let p = Point.new (10, 20);
+                    let x = p.getX();
+                    return;
+                }
+            }
+            """;;
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parse();
+        String actual = parser.VMOutput();
+        String expected = """
+            function Main.main 2
+            push constant 10
+            push constant 20
+            call Point.new 2
+            pop local 0
+            push local 0
+            call Point.getX 1
+            pop local 1
+            push constant 0
+            return
+                """;
+        assertEquals(expected, actual);
+    }
 
 }
