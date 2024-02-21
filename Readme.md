@@ -1,12 +1,11 @@
-mvn package
-java -cp target/jackcompiler-1.0-SNAPSHOT.jar br.ufma.ecp.App
+Projeto de implementação de um compilador com Nand2Tetris. Trabalho em dupla apresentado na disciplina Compiladores, ministrada pelo Professor Dr. Sérgio Souza Costa na Universidade Federal do Maranhão. 
 
+Anotação base: 
+https://www.notion.so/Construindo-Compiladores-com-Nand2Tetris-193b291e3e02443984aeecc796682cfc?pvs=4
 
+Vídeo de demonstração do compilador em funcionamento: 
+link
 
-Compiladores - Implementação do Analisador Sintático da Linguagem Jack com base na seguinte anotação:
-
-https://profsergiocosta.notion.site/Analisador-sint-tico-86562d62ee214064b7a3468d63658801
-
-Professor: Sergio Costa.
-
-Alunos: Jessica Cristina Santos do Nascimento (2021061674) e Victor Valvan Alves Freitas (2022013789).
+Alunos: 
+Jessica Cristina Santos do Nascimento (2021061674, Ciência da Computação) e 
+Victor Valvan Alves Freitas (2022013789, Engenharia da Computação).
