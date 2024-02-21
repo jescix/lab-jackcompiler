@@ -312,12 +312,10 @@ public class Parser {
     }
 
     void parseSubroutineCall() {
-
         var nArgs = 0;
         var ident = currentToken.lexeme;
         var symbol = symTable.resolve(ident);
         var functionName = ident + ".";
-
         if (peekTokenIs(LPAREN)) { 
             expectPeek(LPAREN);
             vmWriter.writePush(Segment.POINTER, 0);
@@ -334,7 +332,7 @@ public class Parser {
                 nArgs = 1; 
             } 
             else {
-                functionName += currentToken.lexeme; // é uma função
+                functionName += currentToken.lexeme; 
             }
             expectPeek(LPAREN);
             nArgs += parseExpressionList();
