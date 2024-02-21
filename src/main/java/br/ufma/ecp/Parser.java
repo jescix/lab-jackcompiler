@@ -308,6 +308,7 @@ public class Parser {
         expectPeek(IDENT);
         parseSubroutineCall();
         expectPeek(SEMICOLON);
+        vmWriter.writePop(Segment.TEMP, 0);
         printNonTerminal("/doStatement");
     }
 
