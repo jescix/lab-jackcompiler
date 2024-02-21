@@ -17,8 +17,9 @@ public class App {
             outputStream = new FileOutputStream(fileName);
             byte[] strToBytes = output.getBytes();
             outputStream.write(strToBytes);
-    
+            
             outputStream.close();
+            System.out.println("saved:"+fileName);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
