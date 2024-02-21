@@ -4,7 +4,7 @@ Anotação base:
 https://www.notion.so/Construindo-Compiladores-com-Nand2Tetris-193b291e3e02443984aeecc796682cfc?pvs=4
 
 Vídeo de demonstração do compilador em funcionamento: 
-link
+https://drive.google.com/file/d/1AEb8S3uQclMbkYzBlB9I0afDSJM79k2A/view?usp=sharing
 
 Alunos: 
 Jessica Cristina Santos do Nascimento (2021061674, Ciência da Computação) e 
